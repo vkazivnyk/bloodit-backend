@@ -28,6 +28,8 @@ namespace BlooditData.Repositories
         IEnumerable<Topic> GetTopics();
         IEnumerable<Topic> GetTopics(string userId);
         IEnumerable<Post> GetPosts();
+        IEnumerable<Post> GetPosts(string postId);
         IEnumerable<Comment> GetComments();
+        IEnumerable<Comment> GetComments(string commentId);
     }
 }

@@ -5,10 +5,10 @@ namespace BlooditData.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        public IEnumerable<UserTopic> UserTopics { get; set; } = new List<UserTopic>();
+        public List<UserTopic> UserTopics { get; set; } = new();
 
-        public IEnumerable<Post> Posts { get; set; } = new List<Post>();
+        public List<Post> Posts { get; set; } = new();
 
-        public IEnumerable<Comment> Comments { get; set; } = new List<Comment>();
+        public List<Comment> Comments { get; set; } = new();
     }
 }

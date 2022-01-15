@@ -1,70 +1,269 @@
-﻿using BlooditData.DbContexts;
-using BlooditData.Models;
+﻿using BlooditData.Models;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace BlooditData.Repositories
 {
-    public sealed class MockAppRepository : IAppRepository
+    public class MockAppRepository : IAppRepository
     {
-        private readonly AppDbContext _context;
+        private readonly List<ApplicationUser> _users;
+        private readonly List<Topic> _topics;
+        private readonly List<Post> _posts;
+        private readonly List<Comment> _comments;
 
-        public MockAppRepository(AppDbContext context)
+        public MockAppRepository()
         {
-            _context = context;
+            _users = new List<ApplicationUser>()
+            {
+                new()
+                {
+                    Id="flkjsdfjksd",
+                    UserTopics = new List<UserTopic>()
+                    {
+                        new()
+                        {
+                            Id = 1,
+                            UserId = "flkjsdfjksd",
+                            TopicId = "fjkdshfljsd",
+                            User = new()
+                            {
+                                Id = "flkjsdfjksd",
+                            },
+                            Topic = new()
+                            {
+                                Id = "fjkdshfljsd",
+                            }
+                        }
+                    },
+                    Posts = new List<Post>()
+                    {
+                        new()
+                        {
+                            Id = "dasdaqsdwdsklfd",
+                            AuthorId = "flkjsdfjksd",
+                            TopicId = "fjkdshfljsd",
+                            Heading = "dead inside",
+                            Body = "how to detect dead inside 3-S rank ghoul in dota 2",
+                            Date = DateTime.Now,
+                            Likes = 1337,
+                            Dislikes = 0
+                        }
+                    },
+                    Comments = new List<Comment>()
+                    {
+                        new()
+                        {
+                            Id = "asdljasdsad",
+                            AuthorId = "flkjsdfjksd",
+                            PostId = "dasdaqsdwdsklfd",
+                            Date = DateTime.Now.AddSeconds(15),
+                            Text = "the best dead inside ever",
+                            Likes = 100,
+                            Dislikes = 0
+                        }
+                    }
+                }
+            };
+
+            _topics = new List<Topic>()
+            {
+                new()
+                {
+                    Id = "fjkdshfljsd",
+                    Name = "dota 2 science",
+                    CreationDate = DateTime.Now,
+                    Posts = new List<Post>()
+                    {
+                        new()
+                        {
+                            Id = "dasdaqsdwdsklfd",
+                            AuthorId = "flkjsdfjksd",
+                            TopicId = "fjkdshfljsd",
+                            Heading = "dead inside",
+                            Body = "how to detect dead inside 3-S rank ghoul in dota 2",
+                            Date = DateTime.Now,
+                            Likes = 1337,
+                            Dislikes = 0
+                        }
+                    },
+                    UserTopics = new List<UserTopic>()
+                    {
+                        new()
+                        {
+                            Id = 1,
+                            UserId = "flkjsdfjksd",
+                            TopicId = "fjkdshfljsd",
+                            User = new()
+                            {
+                                Id = "flkjsdfjksd",
+                            },
+                            Topic = new()
+                            {
+                                Id = "fjkdshfljsd",
+                            }
+                        }
+                    }
+                }
+            };
+
+            _posts = new List<Post>()
+            {
+                new()
+                {
+                    Id = "dasdaqsdwdsklfd",
+                    AuthorId = "flkjsdfjksd",
+                    TopicId = "fjkdshfljsd",
+                    Heading = "dead inside",
+                    Body = "how to detect dead inside 3-S rank ghoul in dota 2",
+                    Date = DateTime.Now,
+                    Likes = 1337,
+                    Dislikes = 0,
+                    User = _users[0],
+                    Topic = _topics[0]
+                }
+            };
+
+            _comments = new List<Comment>()
+            {
+                new()
+                {
+                    Id = "asdljasdsad",
+                    AuthorId = "flkjsdfjksd",
+                    PostId = "dasdaqsdwdsklfd",
+                    Date = DateTime.Now.AddSeconds(15),
+                    Text = "the best dead inside ever",
+                    Likes = 100,
+                    Dislikes = 0,
+                    User = _users[0],
+                    Post = _posts[0]
+                }
+            };
         }
 
-        public Comment CreateComment(Comment comment) => _context.Add(comment).Entity;
+        public Comment CreateComment(Comment comment) 
+        {
+            throw new NotImplementedException();
+        }
 
-        public Post CreatePost(Post post) => _context.Add(post).Entity;
+        public Post CreatePost(Post post)
+        {
+            throw new NotImplementedException();
+        }
 
-        public Topic CreateTopic(Topic topic) => _context.Add(topic).Entity;
+        public Topic CreateTopic(Topic topic)
+        {
+            throw new NotImplementedException();
+        }
 
-        public ApplicationUser CreateUser(ApplicationUser user) => _context.Add(user).Entity;
+        public ApplicationUser CreateUser(ApplicationUser user)
+        {
+            throw new NotImplementedException();
+        }
 
-        public Comment DeleteComment(string commentId) => _context.Remove(GetCommentById(commentId)).Entity;
+        public Comment DeleteComment(string commentId)
+        {
+            throw new NotImplementedException();
+        }
 
-        public Post DeletePost(string postId) => _context.Remove(GetPostById(postId)).Entity;
+        public Post DeletePost(string postId)
+        {
+            throw new NotImplementedException();
+        }
 
-        public Topic DeleteTopic(string topicId) => _context.Remove(GetTopicById(topicId)).Entity;
+        public Topic DeleteTopic(string topicId)
+        {
+            throw new NotImplementedException();
+        }
 
-        public ApplicationUser DeleteUser(string userId) => _context.Remove(GetUserById(userId)).Entity;
+        public ApplicationUser DeleteUser(string userId)
+        {
+            throw new NotImplementedException();
+        }
 
-        public Comment GetCommentById(string commentId) => _context.Comments.Find(commentId);
+        public Comment GetCommentById(string commentId)
+        {
+            throw new NotImplementedException();
+        }
 
-        public IEnumerable<Comment> GetComments() => _context.Comments.ToList();
+        public IEnumerable<Comment> GetComments()
+        {
+            throw new NotImplementedException();
+        }
 
-        public Post GetPostById(string postId) => _context.Posts.Find(postId);
+        public IEnumerable<Comment> GetComments(string commentId)
+        {
+            throw new NotImplementedException();
+        }
 
-        public IEnumerable<Post> GetPosts() => _context.Posts.ToList();
+        public Post GetPostById(string postId)
+        {
+            throw new NotImplementedException();
+        }
 
-        public Topic GetTopicById(string topicId) => _context.Topics.Find(topicId);
+        public IEnumerable<Post> GetPosts()
+        {
+            throw new NotImplementedException();
+        }
 
-        public IEnumerable<Topic> GetTopics() => _context.Topics.ToList();
+        public IEnumerable<Post> GetPosts(string postId)
+        {
+            throw new NotImplementedException();
+        }
 
-        public IEnumerable<Topic> GetTopics(string userId) =>
-            _context.UserTopics
-            .Where(ut => ut.UserId == userId)
-            .Select(ut => ut.Topic);
+        public Topic GetTopicById(string topicId)
+        {
+            throw new NotImplementedException();
+        }
 
-        public ApplicationUser GetUserById(string userId) => _context.Users.Find(userId);
+        public IEnumerable<Topic> GetTopics()
+        {
+            throw new NotImplementedException();
+        }
 
-        public IEnumerable<ApplicationUser> GetUsers() => _context.Users.ToList();
+        public IEnumerable<Topic> GetTopics(string userId)
+        {
+            throw new NotImplementedException();
+        }
 
-        public IEnumerable<ApplicationUser> GetUsers(string topicId) =>
-            _context.UserTopics
-            .Where(ut => ut.TopicId == topicId)
-            .Select(ut => ut.User);
+        public ApplicationUser GetUserById(string userId)
+        {
+            throw new NotImplementedException();
+        }
 
-        public async Task SaveChangesAsync() => await _context.SaveChangesAsync();
+        public IEnumerable<ApplicationUser> GetUsers()
+        {
+            throw new NotImplementedException();
+        }
 
-        public Comment UpdateComment(Comment comment) => _context.Update(comment).Entity;
+        public IEnumerable<ApplicationUser> GetUsers(string topicId)
+        {
+            throw new NotImplementedException();
+        }
 
-        public Post UpdatePost(Post post) => _context.Update(post).Entity;
+        public Task SaveChangesAsync()
+        {
+            throw new NotImplementedException();
+        }
 
-        public Topic UpdateTopic(Topic topic) => _context.Update(topic).Entity;
+        public Comment UpdateComment(Comment comment)
+        {
+            throw new NotImplementedException();
+        }
 
-        public ApplicationUser UpdateUser(ApplicationUser user) => _context.Update(user).Entity;
+        public Post UpdatePost(Post post)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Topic UpdateTopic(Topic topic)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ApplicationUser UpdateUser(ApplicationUser user)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
