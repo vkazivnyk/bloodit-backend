@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BlooditData.Repositories;
+using BlooditWebAPI.GraphQL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -26,6 +28,8 @@ namespace BlooditWebAPI
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IAppRepository, MockAppRepository>();
+
             services
                 .AddGraphQLServer()
                 .AddType<ApplicationUserType>()
@@ -41,7 +45,8 @@ namespace BlooditWebAPI
                 .AddType<CommentAddInputType>()
                 .AddType<CommentAddPayloadType>()
                 .AddType<CommentDeleteInputType>()
-                .AddType<CommentDeletePayloadType>();
+                .AddType<CommentDeletePayloadType>()
+                .AddQueryType<Query>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -67,6 +72,7 @@ namespace BlooditWebAPI
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapGraphQL();
                 endpoints.MapControllers();
             });
         }
