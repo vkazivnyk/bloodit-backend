@@ -16,7 +16,7 @@ namespace BlooditData.DbContexts
 
         public DbSet<Comment> Comments { get; set; }
 
-        public AppDbContext() {  }
+        public AppDbContext() { }
 
         public AppDbContext(DbContextOptions options) : base(options) { }
 
