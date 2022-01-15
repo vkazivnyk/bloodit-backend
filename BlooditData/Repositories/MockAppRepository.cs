@@ -1,11 +1,12 @@
 ﻿using BlooditData.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BlooditData.Repositories
 {
-    public class MockAppRepository : IAppRepository
+    public sealed class MockAppRepository : IAppRepository
     {
         private readonly List<ApplicationUser> _users;
         private readonly List<Topic> _topics;
@@ -143,127 +144,186 @@ namespace BlooditData.Repositories
 
         public Comment CreateComment(Comment comment) 
         {
-            throw new NotImplementedException();
+            if (comment is null)
+            {
+                throw new NullReferenceException();
+            }
+
+            _comments.Add(comment);
+
+            return comment;
         }
 
         public Post CreatePost(Post post)
         {
-            throw new NotImplementedException();
+            if (post is null)
+            {
+                throw new NullReferenceException();
+            }
+
+            _posts.Add(post);
+
+            return post;
         }
 
         public Topic CreateTopic(Topic topic)
         {
-            throw new NotImplementedException();
+            if (topic is null)
+            {
+                throw new NullReferenceException();
+            }
+
+            _topics.Add(topic);
+
+            return topic;
         }
 
         public ApplicationUser CreateUser(ApplicationUser user)
         {
-            throw new NotImplementedException();
+            if (user is null)
+            {
+                throw new NullReferenceException();
+            }
+
+            _users.Add(user);
+
+            return user;
         }
 
         public Comment DeleteComment(string commentId)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(commentId))
+            {
+                throw new NullReferenceException();
+            }
+
+            Comment comment = _comments.Find(c => c.Id == commentId);
+            _comments.Remove(comment);
+
+            return comment;
         }
 
         public Post DeletePost(string postId)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(postId))
+            {
+                throw new NullReferenceException();
+            }
+
+            Post post = _posts.Find(p => p.Id == postId);
+            _posts.Remove(post);
+
+            return post;
         }
 
         public Topic DeleteTopic(string topicId)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(topicId))
+            {
+                throw new NullReferenceException();
+            }
+
+            Topic topic = _topics.Find(t => t.Id == topicId);
+            _topics.Remove(topic);
+
+            return topic;
         }
 
         public ApplicationUser DeleteUser(string userId)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new NullReferenceException();
+            }
+
+            ApplicationUser user = _users.Find(u => u.Id == userId);
+            _users.Remove(user);
+
+            return user;
         }
 
-        public Comment GetCommentById(string commentId)
-        {
-            throw new NotImplementedException();
-        }
+        public Comment GetCommentById(string commentId) => _comments.Find(c => c.Id == commentId);
 
-        public IEnumerable<Comment> GetComments()
-        {
-            throw new NotImplementedException();
-        }
+        public IEnumerable<Comment> GetComments() => _comments;
 
-        public IEnumerable<Comment> GetComments(string commentId)
-        {
-            throw new NotImplementedException();
-        }
+        public IEnumerable<Comment> GetComments(string postId) => _comments.Where(c => c.Post.Id == postId);
 
-        public Post GetPostById(string postId)
-        {
-            throw new NotImplementedException();
-        }
+        public Post GetPostById(string postId) => _posts.Find(p => p.Id == postId);
 
-        public IEnumerable<Post> GetPosts()
-        {
-            throw new NotImplementedException();
-        }
+        public IEnumerable<Post> GetPosts() => _posts;
 
-        public IEnumerable<Post> GetPosts(string postId)
-        {
-            throw new NotImplementedException();
-        }
+        public IEnumerable<Post> GetPosts(string userId) => _posts.Where(p => p.User.Id == userId);
 
-        public Topic GetTopicById(string topicId)
-        {
-            throw new NotImplementedException();
-        }
+        public Topic GetTopicById(string topicId) => _topics.Find(t => t.Id == topicId);
 
-        public IEnumerable<Topic> GetTopics()
-        {
-            throw new NotImplementedException();
-        }
+        public IEnumerable<Topic> GetTopics() => _topics;
 
         public IEnumerable<Topic> GetTopics(string userId)
         {
             throw new NotImplementedException();
         }
 
-        public ApplicationUser GetUserById(string userId)
-        {
-            throw new NotImplementedException();
-        }
+        public ApplicationUser GetUserById(string userId) => _users.Find(u => u.Id == userId);
 
-        public IEnumerable<ApplicationUser> GetUsers()
-        {
-            throw new NotImplementedException();
-        }
+        public IEnumerable<ApplicationUser> GetUsers() => _users;
 
         public IEnumerable<ApplicationUser> GetUsers(string topicId)
         {
             throw new NotImplementedException();
         }
 
-        public Task SaveChangesAsync()
-        {
-            throw new NotImplementedException();
-        }
+        public Task SaveChangesAsync() => Task.CompletedTask;
 
         public Comment UpdateComment(Comment comment)
         {
-            throw new NotImplementedException();
+            Comment oldComment = _comments.Find(c => c.Id == comment.Id);
+            int id = _comments.IndexOf(oldComment);
+            if (id < 0 || id > _comments.Count)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
+            _comments[id] = comment;
+            return comment;
         }
 
         public Post UpdatePost(Post post)
         {
-            throw new NotImplementedException();
+            Post oldPost = _posts.Find(p => p.Id == post.Id);
+            int id = _posts.IndexOf(oldPost);
+            if (id < 0 || id > _posts.Count)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
+            _posts[id] = post;
+            return post;
         }
 
         public Topic UpdateTopic(Topic topic)
         {
-            throw new NotImplementedException();
+            Topic oldTopic = _topics.Find(t => t.Id == topic.Id);
+            int id = _topics.IndexOf(oldTopic);
+            if (id < 0 || id > _topics.Count)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
+            _topics[id] = topic;
+            return topic;
         }
 
         public ApplicationUser UpdateUser(ApplicationUser user)
         {
-            throw new NotImplementedException();
+            ApplicationUser oldUser = _users.Find(u => u.Id == user.Id);
+            int id = _users.IndexOf(oldUser);
+            if (id < 0 || id > _users.Count)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
+            _users[id] = user;
+            return user;
         }
     }
 }
