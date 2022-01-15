@@ -61,6 +61,8 @@ namespace BlooditWebAPI.GraphQL.Users
                 .Field(u => u.TwoFactorEnabled)
                 .Ignore();
 
+            // TODO: add resolvers
+
             base.Configure(descriptor);
         }
     }
