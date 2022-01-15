@@ -11,6 +11,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BlooditWebAPI.GraphQL.Comments;
+using BlooditWebAPI.GraphQL.Posts;
+using BlooditWebAPI.GraphQL.Topics;
+using BlooditWebAPI.GraphQL.Users;
 
 namespace BlooditWebAPI
 {
@@ -25,7 +29,22 @@ namespace BlooditWebAPI
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddGraphQLServer();
+            services
+                .AddGraphQLServer()
+                .AddType<ApplicationUserType>()
+                .AddType<TopicType>()
+                .AddType<TopicAddInputType>()
+                .AddType<TopicAddPayloadType>()
+                .AddType<PostType>()
+                .AddType<PostAddInputType>()
+                .AddType<PostAddPayloadType>()
+                .AddType<PostDeleteInputType>()
+                .AddType<PostDeletePayloadType>()
+                .AddType<CommentType>()
+                .AddType<CommentAddInputType>()
+                .AddType<CommentAddPayloadType>()
+                .AddType<CommentDeleteInputType>()
+                .AddType<CommentDeletePayloadType>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

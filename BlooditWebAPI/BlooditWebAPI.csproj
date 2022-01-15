@@ -13,4 +13,9 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.12" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BlooditData\BlooditData.csproj" />
+    <ProjectReference Include="..\BlooditServices\BlooditServices.csproj" />
+  </ItemGroup>
+
 </Project>
