@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using BlooditData.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace BlooditData.Models.DbContexts
+namespace BlooditData.DbContexts
 {
     public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
