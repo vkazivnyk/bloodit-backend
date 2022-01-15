@@ -146,7 +146,7 @@ namespace BlooditData.Repositories
         {
             if (comment is null)
             {
-                throw new NullReferenceException();
+                throw new ArgumentNullException(nameof(comment));
             }
 
             _comments.Add(comment);
@@ -158,7 +158,7 @@ namespace BlooditData.Repositories
         {
             if (post is null)
             {
-                throw new NullReferenceException();
+                throw new ArgumentNullException(nameof(post));
             }
 
             _posts.Add(post);
@@ -170,7 +170,7 @@ namespace BlooditData.Repositories
         {
             if (topic is null)
             {
-                throw new NullReferenceException();
+                throw new ArgumentNullException(nameof(topic));
             }
 
             _topics.Add(topic);
@@ -182,7 +182,7 @@ namespace BlooditData.Repositories
         {
             if (user is null)
             {
-                throw new NullReferenceException();
+                throw new ArgumentNullException(nameof(user));
             }
 
             _users.Add(user);
@@ -194,7 +194,7 @@ namespace BlooditData.Repositories
         {
             if (string.IsNullOrEmpty(commentId))
             {
-                throw new NullReferenceException();
+                throw new ArgumentException();
             }
 
             Comment comment = _comments.Find(c => c.Id == commentId);
@@ -207,7 +207,7 @@ namespace BlooditData.Repositories
         {
             if (string.IsNullOrEmpty(postId))
             {
-                throw new NullReferenceException();
+                throw new ArgumentException();
             }
 
             Post post = _posts.Find(p => p.Id == postId);
@@ -220,7 +220,7 @@ namespace BlooditData.Repositories
         {
             if (string.IsNullOrEmpty(topicId))
             {
-                throw new NullReferenceException();
+                throw new ArgumentException();
             }
 
             Topic topic = _topics.Find(t => t.Id == topicId);
@@ -233,7 +233,7 @@ namespace BlooditData.Repositories
         {
             if (string.IsNullOrEmpty(userId))
             {
-                throw new NullReferenceException();
+                throw new ArgumentException();
             }
 
             ApplicationUser user = _users.Find(u => u.Id == userId);
@@ -280,7 +280,7 @@ namespace BlooditData.Repositories
             int id = _comments.IndexOf(oldComment);
             if (id < 0 || id > _comments.Count)
             {
-                throw new IndexOutOfRangeException();
+                throw new KeyNotFoundException();
             }
 
             _comments[id] = comment;
@@ -293,7 +293,7 @@ namespace BlooditData.Repositories
             int id = _posts.IndexOf(oldPost);
             if (id < 0 || id > _posts.Count)
             {
-                throw new IndexOutOfRangeException();
+                throw new KeyNotFoundException();
             }
 
             _posts[id] = post;
@@ -306,7 +306,7 @@ namespace BlooditData.Repositories
             int id = _topics.IndexOf(oldTopic);
             if (id < 0 || id > _topics.Count)
             {
-                throw new IndexOutOfRangeException();
+                throw new KeyNotFoundException();
             }
 
             _topics[id] = topic;
@@ -319,7 +319,7 @@ namespace BlooditData.Repositories
             int id = _users.IndexOf(oldUser);
             if (id < 0 || id > _users.Count)
             {
-                throw new IndexOutOfRangeException();
+                throw new KeyNotFoundException();
             }
 
             _users[id] = user;
