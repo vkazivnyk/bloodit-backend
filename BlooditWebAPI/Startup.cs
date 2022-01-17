@@ -22,16 +22,39 @@ namespace BlooditWebAPI
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
 
         public IConfiguration Configuration { get; }
 
+        public IWebHostEnvironment Environment { get; }
+
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContextPool<AppDbContext>(options =>
+            {
+                options.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=bloodit;Trusted_connection=True;");
+            });
+
             services.AddScoped<IAppRepository, MockAppRepository>();
+
+            string corsHost = Environment.IsDevelopment()
+                ? "localhost"
+                : "";
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("Default", builder =>
+                {
+                    builder
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .SetIsOriginAllowed(origin => new Uri(origin).Host == corsHost);
+                });
+            });
 
             services
                 .AddGraphQLServer()
@@ -68,6 +91,8 @@ namespace BlooditWebAPI
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BlooditWebAPI v1"));
             }
+
+            app.UseCors("Default");
 
             app.UseHttpsRedirection();
 
