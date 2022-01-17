@@ -15,7 +15,7 @@ namespace BlooditWebAPI.GraphQL.Extensions
     {
         public IEnumerable<Topic> GetTopic([Parent] ApplicationUser user, [Service] IAppRepository repository)
         {
-            return repository.GetTopics(user.Id);
+            return repository.GetTopicsByUserId(user.Id);
         }
     }
 }
