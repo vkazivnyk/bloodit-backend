@@ -11,6 +11,7 @@ namespace BlooditData.Repositories
         private readonly List<ApplicationUser> _users;
         private readonly List<Topic> _topics;
         private readonly List<Post> _posts;
+        private readonly List<UserTopic> _userTopics;
         private readonly List<Comment> _comments;
 
         public MockAppRepository()
@@ -27,11 +28,11 @@ namespace BlooditData.Repositories
                             Id = 1,
                             UserId = "flkjsdfjksd",
                             TopicId = "fjkdshfljsd",
-                            User = new()
+                            User = new ApplicationUser()
                             {
                                 Id = "flkjsdfjksd",
                             },
-                            Topic = new()
+                            Topic = new Topic()
                             {
                                 Id = "fjkdshfljsd",
                             }
@@ -95,16 +96,28 @@ namespace BlooditData.Repositories
                             Id = 1,
                             UserId = "flkjsdfjksd",
                             TopicId = "fjkdshfljsd",
-                            User = new()
+                            User = new ApplicationUser()
                             {
                                 Id = "flkjsdfjksd",
                             },
-                            Topic = new()
+                            Topic = new Topic()
                             {
                                 Id = "fjkdshfljsd",
                             }
                         }
                     }
+                }
+            };
+
+            _userTopics = new List<UserTopic>()
+            {
+                new()
+                {
+                    Id = 1,
+                    UserId = "flkjsdfjksd",
+                    TopicId = "fjkdshfljsd",
+                    User = _users[0],
+                    Topic = _topics[0]
                 }
             };
 
@@ -142,7 +155,7 @@ namespace BlooditData.Repositories
             };
         }
 
-        public Comment CreateComment(Comment comment) 
+        public Comment CreateComment(Comment comment)
         {
             if (comment is null)
             {
@@ -258,19 +271,21 @@ namespace BlooditData.Repositories
 
         public IEnumerable<Topic> GetTopics() => _topics;
 
-        public IEnumerable<Topic> GetTopics(string userId)
-        {
-            throw new NotImplementedException();
-        }
+        public IEnumerable<Topic> GetTopics(string userId) =>
+            _userTopics
+            .Where(ut => ut.UserId == userId)
+            .Select(ut => ut.Topic)
+            .ToList();
 
         public ApplicationUser GetUserById(string userId) => _users.Find(u => u.Id == userId);
 
         public IEnumerable<ApplicationUser> GetUsers() => _users;
 
-        public IEnumerable<ApplicationUser> GetUsers(string topicId)
-        {
-            throw new NotImplementedException();
-        }
+        public IEnumerable<ApplicationUser> GetUsers(string topicId) =>
+            _userTopics
+                .Where(ut => ut.TopicId == topicId)
+                .Select(ut => ut.User)
+                .ToList();
 
         public Task SaveChangesAsync() => Task.CompletedTask;
 

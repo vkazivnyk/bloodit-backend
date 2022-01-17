@@ -35,7 +35,7 @@ namespace BlooditData.Repositories
 
         public IEnumerable<Comment> GetComments() => _context.Comments.ToList();
 
-        public IEnumerable<Comment> GetComments(string postId) => 
+        public IEnumerable<Comment> GetComments(string postId) =>
             _context.Comments
             .Where(c => c.Post.Id == postId)
             .ToList();
@@ -44,7 +44,7 @@ namespace BlooditData.Repositories
 
         public IEnumerable<Post> GetPosts() => _context.Posts.ToList();
 
-        public IEnumerable<Post> GetPosts(string userId) => 
+        public IEnumerable<Post> GetPosts(string userId) =>
             _context.Posts
             .Where(p => p.User.Id == userId)
             .ToList();
