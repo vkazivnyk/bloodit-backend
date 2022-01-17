@@ -36,14 +36,12 @@ namespace BlooditWebAPI
         {
             services.AddDbContextPool<AppDbContext>(options =>
             {
-                options.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=bloodit;Trusted_connection=True;");
+                options.UseSqlServer(Configuration.GetConnectionString("AppDb"));
             });
 
             services.AddScoped<IAppRepository, MockAppRepository>();
 
-            string corsHost = Environment.IsDevelopment()
-                ? "localhost"
-                : "";
+            string corsUrl = Configuration.GetSection("AllowedHosts").Value;
 
             services.AddCors(options =>
             {
@@ -52,7 +50,7 @@ namespace BlooditWebAPI
                     builder
                         .AllowAnyHeader()
                         .AllowAnyMethod()
-                        .SetIsOriginAllowed(origin => new Uri(origin).Host == corsHost);
+                        .SetIsOriginAllowed(origin => new Uri(origin).Host == corsUrl);
                 });
             });
 
