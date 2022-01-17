@@ -72,7 +72,9 @@ namespace BlooditWebAPI
                 .AddType<CommentAddPayloadType>()
                 .AddType<CommentDeleteInputType>()
                 .AddType<CommentDeletePayloadType>()
-                .AddQueryType<Query>();
+                .AddQueryType<Query>()
+                .AddFiltering()
+                .AddSorting();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
