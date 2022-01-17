@@ -63,6 +63,10 @@ namespace BlooditData.Repositories
 
         public IEnumerable<Topic> GetTopics() => _context.Topics.ToList();
 
+        public Topic GetTopicByPostId(string postId) =>
+            _context.Posts
+                .FirstOrDefault(p => p.Id == postId)?.Topic;
+
         public IEnumerable<Topic> GetTopicsByUserId(string userId) =>
             _context.UserTopics
                 .Where(ut => ut.UserId == userId)
@@ -72,6 +76,10 @@ namespace BlooditData.Repositories
         public ApplicationUser GetUserById(string userId) => _context.Users.Find(userId);
 
         public IEnumerable<ApplicationUser> GetUsers() => _context.Users.ToList();
+
+        public ApplicationUser GetUserByPostId(string postId) =>
+            _context.Posts
+                .FirstOrDefault(p => p.Id == postId)?.User;
 
         public IEnumerable<ApplicationUser> GetUsersByTopicId(string topicId) =>
             _context.UserTopics
@@ -88,5 +96,13 @@ namespace BlooditData.Repositories
         public Topic UpdateTopic(Topic topic) => _context.Update(topic).Entity;
 
         public ApplicationUser UpdateUser(ApplicationUser user) => _context.Update(user).Entity;
+
+        public ApplicationUser GetUserByCommentId(string commentId) =>
+            _context.Comments
+                .FirstOrDefault(c => c.Id == commentId)?.User;
+
+        public Post GetPostByCommentId(string commentId) =>
+            _context.Comments
+                .FirstOrDefault(c => c.Id == commentId)?.Post;
     }
 }

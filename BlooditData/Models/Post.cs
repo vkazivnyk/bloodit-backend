@@ -29,7 +29,7 @@ namespace BlooditData.Models
         [Required]
         public int Dislikes { get; set; }
 
-        public IEnumerable<Comment> Comments { get; set; }
+        public List<Comment> Comments { get; set; } = new();
 
         public ApplicationUser User { get; set; }
 

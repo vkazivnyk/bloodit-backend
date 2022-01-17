@@ -15,8 +15,8 @@ namespace BlooditData.Models
         [Required]
         public DateTime CreationDate { get; set; }
 
-        public IEnumerable<Post> Posts { get; set; }
+        public List<Post> Posts { get; set; } = new();
 
-        public IEnumerable<UserTopic> UserTopics { get; set; }
+        public List<UserTopic> UserTopics { get; set; } = new();
     }
 }
