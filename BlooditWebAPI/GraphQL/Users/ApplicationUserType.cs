@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BlooditData.Models;
+using BlooditData.Repositories;
+using HotChocolate;
 using HotChocolate.Types;
 
 namespace BlooditWebAPI.GraphQL.Users
@@ -61,7 +63,9 @@ namespace BlooditWebAPI.GraphQL.Users
                 .Field(u => u.TwoFactorEnabled)
                 .Ignore();
 
-            // TODO: add resolvers
+            descriptor
+                .Field(u => u.UserTopics)
+                .Ignore();
 
             base.Configure(descriptor);
         }

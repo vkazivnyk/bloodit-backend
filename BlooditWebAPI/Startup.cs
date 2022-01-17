@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using BlooditWebAPI.GraphQL.Comments;
+using BlooditWebAPI.GraphQL.Extensions;
 using BlooditWebAPI.GraphQL.Posts;
 using BlooditWebAPI.GraphQL.Topics;
 using BlooditWebAPI.GraphQL.Users;
@@ -33,6 +34,7 @@ namespace BlooditWebAPI
             services
                 .AddGraphQLServer()
                 .AddType<ApplicationUserType>()
+                .AddTypeExtension<ApplicationUserTypeExtensions>()
                 .AddType<TopicType>()
                 .AddType<TopicAddInputType>()
                 .AddType<TopicAddPayloadType>()
