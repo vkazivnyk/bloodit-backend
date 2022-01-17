@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BlooditData.DbContexts;
+using BlooditData.Repositories;
+using BlooditWebAPI.GraphQL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -9,9 +12,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using BlooditWebAPI.GraphQL.Comments;
+using BlooditWebAPI.GraphQL.Extensions;
 using BlooditWebAPI.GraphQL.Posts;
 using BlooditWebAPI.GraphQL.Topics;
 using BlooditWebAPI.GraphQL.Users;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlooditWebAPI
 {
@@ -26,10 +31,14 @@ namespace BlooditWebAPI
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IAppRepository, MockAppRepository>();
+
             services
                 .AddGraphQLServer()
                 .AddType<ApplicationUserType>()
+                .AddTypeExtension<ApplicationUserTypeExtensions>()
                 .AddType<TopicType>()
+                .AddTypeExtension<TopicTypeExtensions>()
                 .AddType<TopicAddInputType>()
                 .AddType<TopicAddPayloadType>()
                 .AddType<PostType>()
@@ -41,7 +50,8 @@ namespace BlooditWebAPI
                 .AddType<CommentAddInputType>()
                 .AddType<CommentAddPayloadType>()
                 .AddType<CommentDeleteInputType>()
-                .AddType<CommentDeletePayloadType>();
+                .AddType<CommentDeletePayloadType>()
+                .AddQueryType<Query>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -67,6 +77,7 @@ namespace BlooditWebAPI
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapGraphQL();
                 endpoints.MapControllers();
             });
         }
