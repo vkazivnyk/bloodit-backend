@@ -17,7 +17,8 @@ namespace BlooditWebAPI.GraphQL.Posts
 
             descriptor
                 .Field(p => p.Comments)
-                .ResolveWith<Resolvers>(r => r.GetComment(default!, default!));
+                .Name("comment")
+                .ResolveWith<Resolvers>(r => r.GetComments(default!, default!));
 
             descriptor
                 .Field(p => p.User)
@@ -32,7 +33,7 @@ namespace BlooditWebAPI.GraphQL.Posts
 
         private class Resolvers
         {
-            public IEnumerable<Comment> GetComment(Post post, [Service] IAppRepository repository)
+            public IEnumerable<Comment> GetComments(Post post, [Service] IAppRepository repository)
             {
                 return repository.GetCommentsByPostId(post.Id);
             }
