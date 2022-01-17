@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BlooditData.DbContexts;
 using BlooditData.Repositories;
 using BlooditWebAPI.GraphQL;
 using Microsoft.AspNetCore.Builder;
@@ -15,6 +16,7 @@ using BlooditWebAPI.GraphQL.Extensions;
 using BlooditWebAPI.GraphQL.Posts;
 using BlooditWebAPI.GraphQL.Topics;
 using BlooditWebAPI.GraphQL.Users;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlooditWebAPI
 {
@@ -36,6 +38,7 @@ namespace BlooditWebAPI
                 .AddType<ApplicationUserType>()
                 .AddTypeExtension<ApplicationUserTypeExtensions>()
                 .AddType<TopicType>()
+                .AddTypeExtension<TopicTypeExtensions>()
                 .AddType<TopicAddInputType>()
                 .AddType<TopicAddPayloadType>()
                 .AddType<PostType>()

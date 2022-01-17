@@ -67,7 +67,28 @@ namespace BlooditWebAPI.GraphQL.Users
                 .Field(u => u.UserTopics)
                 .Ignore();
 
+            descriptor
+                .Field(u => u.Posts)
+                .ResolveWith<Resolvers>(r => r.GetPost(default, default));
+
+            descriptor
+                .Field(u => u.Comments)
+                .ResolveWith<Resolvers>(r => r.GetComment(default, default));
+
             base.Configure(descriptor);
+        }
+
+        private class Resolvers
+        {
+            public IEnumerable<Post> GetPost(ApplicationUser user, [Service] IAppRepository repository)
+            {
+                return repository.GetPostsByUserId(user.Id);
+            }
+
+            public IEnumerable<Comment> GetComment(ApplicationUser user, [Service] IAppRepository repository)
+            {
+                return repository.GetCommentsByUserId(user.Id);
+            }
         }
     }
 }

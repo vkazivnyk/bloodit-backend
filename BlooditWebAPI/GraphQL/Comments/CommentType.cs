@@ -13,8 +13,6 @@ namespace BlooditWebAPI.GraphQL.Comments
         {
             descriptor.Description("Represents the type for a post comment.");
 
-            // TODO: add resolvers
-
             base.Configure(descriptor);
         }
     }
