@@ -36,7 +36,7 @@ namespace BlooditWebAPI
         {
             services.AddDbContextPool<AppDbContext>(options =>
             {
-                options.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=bloodit;Trusted_connection=True;");
+                options.UseSqlServer(Configuration.GetConnectionString("AppDb"));
             });
 
             services.AddScoped<IAppRepository, MockAppRepository>();
