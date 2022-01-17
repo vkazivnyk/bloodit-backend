@@ -35,39 +35,49 @@ namespace BlooditData.Repositories
 
         public IEnumerable<Comment> GetComments() => _context.Comments.ToList();
 
-        public IEnumerable<Comment> GetComments(string postId) =>
+        public IEnumerable<Comment> GetCommentsByPostId(string postId) =>
             _context.Comments
-            .Where(c => c.Post.Id == postId)
-            .ToList();
+                .Where(c => c.Post.Id == postId)
+                .ToList();
+
+        public IEnumerable<Comment> GetCommentsByUserId(string userId) =>
+            _context.Comments
+                .Where(c => c.User.Id == userId)
+                .ToList();
 
         public Post GetPostById(string postId) => _context.Posts.Find(postId);
 
         public IEnumerable<Post> GetPosts() => _context.Posts.ToList();
 
-        public IEnumerable<Post> GetPosts(string userId) =>
+        public IEnumerable<Post> GetPostsByTopicId(string topicId) =>
             _context.Posts
-            .Where(p => p.User.Id == userId)
-            .ToList();
+                .Where(p => p.Topic.Id == topicId)
+                .ToList();
+
+        public IEnumerable<Post> GetPostsByUserId(string userId) =>
+            _context.Posts
+                .Where(p => p.User.Id == userId)
+                .ToList();
 
         public Topic GetTopicById(string topicId) => _context.Topics.Find(topicId);
 
         public IEnumerable<Topic> GetTopics() => _context.Topics.ToList();
 
-        public IEnumerable<Topic> GetTopics(string userId) =>
+        public IEnumerable<Topic> GetTopicsByUserId(string userId) =>
             _context.UserTopics
-            .Where(ut => ut.UserId == userId)
-            .Select(ut => ut.Topic)
-            .ToList();
+                .Where(ut => ut.UserId == userId)
+                .Select(ut => ut.Topic)
+                .ToList();
 
         public ApplicationUser GetUserById(string userId) => _context.Users.Find(userId);
 
         public IEnumerable<ApplicationUser> GetUsers() => _context.Users.ToList();
 
-        public IEnumerable<ApplicationUser> GetUsers(string topicId) =>
+        public IEnumerable<ApplicationUser> GetUsersByTopicId(string topicId) =>
             _context.UserTopics
-            .Where(ut => ut.TopicId == topicId)
-            .Select(ut => ut.User)
-            .ToList();
+                .Where(ut => ut.TopicId == topicId)
+                .Select(ut => ut.User)
+                .ToList();
 
         public async Task SaveChangesAsync() => await _context.SaveChangesAsync();
 

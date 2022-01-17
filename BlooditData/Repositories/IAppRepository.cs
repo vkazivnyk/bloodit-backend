@@ -24,12 +24,14 @@ namespace BlooditData.Repositories
         Post GetPostById(string postId);
         Comment GetCommentById(string commentId);
         IEnumerable<ApplicationUser> GetUsers();
-        IEnumerable<ApplicationUser> GetUsers(string topicId);
+        IEnumerable<ApplicationUser> GetUsersByTopicId(string topicId);
         IEnumerable<Topic> GetTopics();
-        IEnumerable<Topic> GetTopics(string userId);
+        IEnumerable<Topic> GetTopicsByUserId(string userId);
         IEnumerable<Post> GetPosts();
-        IEnumerable<Post> GetPosts(string userId);
+        IEnumerable<Post> GetPostsByUserId(string userId);
+        IEnumerable<Post> GetPostsByTopicId(string topicId);
         IEnumerable<Comment> GetComments();
-        IEnumerable<Comment> GetComments(string postId);
+        IEnumerable<Comment> GetCommentsByUserId(string userId);
+        IEnumerable<Comment> GetCommentsByPostId(string postId);
     }
 }
