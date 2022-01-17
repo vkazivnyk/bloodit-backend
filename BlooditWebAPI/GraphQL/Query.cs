@@ -9,7 +9,7 @@ using HotChocolate.Data;
 
 namespace BlooditWebAPI.GraphQL
 {
-    [GraphQLDescription("Represents user, topic, post & comment queries.")]
+    [GraphQLDescription("Represents type queries.")]
     public class Query
     {
         [UseFiltering]

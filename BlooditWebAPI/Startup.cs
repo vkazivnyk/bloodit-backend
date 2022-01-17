@@ -73,6 +73,7 @@ namespace BlooditWebAPI
                 .AddType<CommentDeleteInputType>()
                 .AddType<CommentDeletePayloadType>()
                 .AddQueryType<Query>()
+                .AddMutationType<Mutation>()
                 .AddFiltering()
                 .AddSorting();
 
