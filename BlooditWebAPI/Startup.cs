@@ -77,6 +77,8 @@ namespace BlooditWebAPI
                 .AddFiltering()
                 .AddSorting();
 
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
