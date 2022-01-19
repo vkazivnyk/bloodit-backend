@@ -78,12 +78,12 @@ namespace BlooditWebAPI.GraphQL
                 throw new ArgumentNullException(nameof(input));
             }
 
-            Comment newComment = mapper.Map<Comment>(input);
+            Comment mappedComment = mapper.Map<Comment>(input);
 
-            repository.CreateComment(newComment);
+            Comment addedComment = repository.CreateComment(mappedComment);
             await repository.SaveChangesAsync();
 
-            return new CommentAddPayload(newComment);
+            return new CommentAddPayload(addedComment);
         }
 
         [GraphQLDescription("Represents the mutation for deleting a comment.")]
