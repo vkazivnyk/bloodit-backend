@@ -259,18 +259,9 @@ namespace BlooditData.Repositories
 
         public IEnumerable<Comment> GetComments() => _comments;
 
-        public IEnumerable<Comment> GetCommentsByPostId(string postId) => _comments.Where(c => c.Post.Id == postId);
-
-        public IEnumerable<Comment> GetCommentsByUserId(string userId) => _comments.Where(c => c.User.Id == userId);
-
         public Post GetPostById(string postId) => _posts.Find(p => p.Id == postId);
 
         public IEnumerable<Post> GetPosts() => _posts;
-        public Post GetPostByCommentId(string commentId) => _comments.FirstOrDefault(c => c.Id == commentId)?.Post;
-
-        public IEnumerable<Post> GetPostsByTopicId(string topicId) => _posts.Where(p => p.Topic.Id == topicId);
-
-        public IEnumerable<Post> GetPostsByUserId(string userId) => _posts.Where(p => p.User.Id == userId);
 
         public Topic GetTopicById(string topicId) => _topics.Find(t => t.Id == topicId);
 
@@ -286,10 +277,6 @@ namespace BlooditData.Repositories
         public ApplicationUser GetUserById(string userId) => _users.Find(u => u.Id == userId);
 
         public IEnumerable<ApplicationUser> GetUsers() => _users;
-        public ApplicationUser GetUserByPostId(string postId) => _posts.FirstOrDefault(p => p.Id == postId)?.User;
-
-        public ApplicationUser GetUserByCommentId(string commentId) =>
-            _comments.FirstOrDefault(c => c.Id == commentId)?.User;
 
         public IEnumerable<ApplicationUser> GetUsersByTopicId(string topicId) =>
             _userTopics
