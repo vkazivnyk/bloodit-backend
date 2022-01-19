@@ -15,24 +15,7 @@ namespace BlooditWebAPI.GraphQL.Topics
         {
             descriptor.Description("Represents the type for a topic.");
 
-            descriptor
-                .Field(t => t.UserTopics)
-                .Ignore();
-
-            descriptor
-                .Field(t => t.Posts)
-                .Name("post")
-                .ResolveWith<Resolvers>(r => r.GetPosts(default, default));
-
             base.Configure(descriptor);
-        }
-
-        private class Resolvers
-        {
-            public IEnumerable<Post> GetPosts(Topic topic, [Service] IAppRepository repository)
-            {
-                return repository.GetPostsByTopicId(topic.Id);
-            }
         }
     }
 }
