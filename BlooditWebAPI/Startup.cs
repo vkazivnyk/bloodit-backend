@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using BlooditWebAPI.GraphQL.Comments;
+using BlooditWebAPI.GraphQL.ErrorFilters;
 using BlooditWebAPI.GraphQL.Extensions;
 using BlooditWebAPI.GraphQL.Posts;
 using BlooditWebAPI.GraphQL.Topics;
@@ -74,6 +75,7 @@ namespace BlooditWebAPI
                 .AddType<CommentDeletePayloadType>()
                 .AddQueryType<Query>()
                 .AddMutationType<Mutation>()
+                .AddErrorFilter<GraphQLErrorFilter>()
                 .AddFiltering()
                 .AddSorting();
 
