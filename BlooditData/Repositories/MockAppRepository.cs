@@ -297,7 +297,7 @@ namespace BlooditData.Repositories
                 .Select(ut => ut.User)
                 .ToList();
 
-        public Task SaveChangesAsync() => Task.CompletedTask;
+        public Task<int> SaveChangesAsync() => Task.Run(() => 1);
 
         public Comment UpdateComment(Comment comment)
         {
