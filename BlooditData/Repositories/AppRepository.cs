@@ -19,44 +19,30 @@ namespace BlooditData.Repositories
 
         public Comment CreateComment(Comment comment)
         {
-            EntityEntry<Comment> entity = _context.Add(comment);
-
-            entity.Reference(c => c.User).Load();
-            entity.Reference(c => c.Post).Load();
-
-            return entity.Entity;
+            Comment toCreate = _context.Comments.CreateProxy();
+            _context.Entry(toCreate).CurrentValues.SetValues(comment);
+            return _context.Add(comment).Entity;
         }
 
         public Post CreatePost(Post post)
         {
-            EntityEntry<Post> entity = _context.Add(post);
-
-            entity.Collection(p => p.Comments).Load();
-            entity.Reference(p => p.User).Load();
-            entity.Reference(p => p.Topic).Load();
-
-            return entity.Entity;
+            Post toCreate = _context.Posts.CreateProxy();
+            _context.Entry(toCreate).CurrentValues.SetValues(post);
+            return _context.Add(post).Entity;
         }
 
         public Topic CreateTopic(Topic topic)
         {
-            EntityEntry<Topic> entity = _context.Add(topic);
-
-            entity.Collection(t => t.Posts).Load();
-            entity.Collection(t => t.UserTopics).Load();
-
-            return entity.Entity;
+            Topic toCreate = _context.Topics.CreateProxy();
+            _context.Entry(toCreate).CurrentValues.SetValues(topic);
+            return _context.Add(topic).Entity;
         }
 
         public ApplicationUser CreateUser(ApplicationUser user)
         {
-            EntityEntry<ApplicationUser> entity = _context.Add(user);
-
-            entity.Collection(u => u.Posts).Load();
-            entity.Collection(u => u.Comments).Load();
-            entity.Collection(u => u.UserTopics).Load();
-
-            return entity.Entity;
+            ApplicationUser toCreate = _context.Users.CreateProxy();
+            _context.Entry(toCreate).CurrentValues.SetValues(user);
+            return _context.Add(user).Entity;
         }
 
         public Comment DeleteComment(string commentId)
@@ -101,273 +87,82 @@ namespace BlooditData.Repositories
             return entity.Entity;
         }
 
-        public Comment GetCommentById(string commentId)
-        {
-            Comment comment = _context.Comments.Find(commentId);
-            if (comment is null)
-            {
-                return default;
-            }
+        public Comment GetCommentById(string commentId) => _context.Comments.Find(commentId);
 
-            EntityEntry<Comment> entity = _context.Entry(comment);
+        public IEnumerable<Comment> GetComments() => _context.Comments;
 
-            entity.Reference(c => c.User).Load();
-            entity.Reference(c => c.Post).Load();
-
-            return entity.Entity;
-        }
-
-        public IEnumerable<Comment> GetComments()
-        {
-            return _context.Comments
+        public IEnumerable<Comment> GetCommentsByPostId(string postId) =>
+            _context.Comments
                 .Include(c => c.Post)
-                .Include(c => c.User);
-        }
-
-        public IEnumerable<Comment> GetCommentsByPostId(string postId)
-        {
-            return _context.Comments
-                .Include(c => c.Post)
-                .Include(c => c.User)
                 .Where(c => c.Post.Id == postId);
-        }
 
-        public IEnumerable<Comment> GetCommentsByUserId(string userId)
-        {
-            return _context.Comments
-                .Include(c => c.Post)
+        public IEnumerable<Comment> GetCommentsByUserId(string userId) =>
+            _context.Comments
                 .Include(c => c.User)
                 .Where(c => c.User.Id == userId);
-        }
 
-        public Post GetPostById(string postId)
-        {
-            Post post = _context.Posts.Find(postId);
+        public Post GetPostById(string postId) => _context.Posts.Find(postId);
 
-            if (post is null)
-            {
-                return default;
-            }
+        public IEnumerable<Post> GetPosts() => _context.Posts.ToList();
 
-            EntityEntry<Post> entity = _context.Entry(post);
-
-            entity.Collection(p => p.Comments).Load();
-            entity.Reference(p => p.User).Load();
-            entity.Reference(p => p.Topic).Load();
-
-            return entity.Entity;
-        }
-
-        public IEnumerable<Post> GetPosts()
-        { 
-            return _context.Posts
-                .Include(p => p.Comments)
-                .Include(p => p.User)
-                .Include(p => p.Topic);
-        }
-
-        public IEnumerable<Post> GetPostsByTopicId(string topicId)
-        {
-            return _context.Posts
-                .Include(p => p.Comments)
-                .Include(p => p.User)
+        public IEnumerable<Post> GetPostsByTopicId(string topicId) =>
+            _context.Posts
                 .Include(p => p.Topic)
                 .Where(p => p.Topic.Id == topicId);
-        }
 
-        public IEnumerable<Post> GetPostsByUserId(string userId)
-        {
-            return _context.Posts
-                .Include(p => p.Comments)
+        public IEnumerable<Post> GetPostsByUserId(string userId) =>
+            _context.Posts
                 .Include(p => p.User)
-                .Include(p => p.Topic)
                 .Where(p => p.User.Id == userId);
-        }
 
-        public Topic GetTopicById(string topicId)
-        {
-            Topic topic = _context.Topics.Find(topicId);
+        public Topic GetTopicById(string topicId) => _context.Topics.Find(topicId);
 
-            if (topic is null)
-            {
-                return default;
-            }
+        public IEnumerable<Topic> GetTopics() => _context.Topics;
 
-            EntityEntry<Topic> entity = _context.Entry(topic);
+        public Topic GetTopicByPostId(string postId) =>
+            _context.Posts
+                .Include(p => p.Topic)
+                .FirstOrDefault(p => p.Id == postId)?.Topic;
 
-            entity.Collection(t => t.Posts).Load();
-            entity.Collection(t => t.UserTopics).Load();
-
-            return entity.Entity;
-        }
-
-        public IEnumerable<Topic> GetTopics()
-        {
-            return _context.Topics
-                .Include(t => t.Posts)
-                .Include(t => t.UserTopics);
-        }
-
-        public Topic GetTopicByPostId(string postId)
-        {
-            Topic topic = _context.Posts.FirstOrDefault(p => p.Id == postId)?.Topic;
-
-            if (topic is null)
-            {
-                return default;
-            }
-
-            EntityEntry<Topic> entity = _context.Entry(topic);
-
-            entity.Collection(t => t.Posts).Load();
-            entity.Collection(t => t.UserTopics).Load();
-
-            return entity.Entity;
-        }
-
-        public IEnumerable<Topic> GetTopicsByUserId(string userId)
-        {
-            return _context.UserTopics
-                .Where(ut => ut.UserId == userId)
+        public IEnumerable<Topic> GetTopicsByUserId(string userId) =>
+            _context.UserTopics
                 .Include(ut => ut.Topic)
-                .Select(ut => ut.Topic)
-                .Include(t => t.Posts)
-                .Include(t => t.UserTopics);
-        }
+                .Where(ut => ut.UserId == userId)
+                .Select(ut => ut.Topic);
 
-        public ApplicationUser GetUserById(string userId)
-        {
-            ApplicationUser user = _context.Users.Find(userId);
+        public ApplicationUser GetUserById(string userId) => _context.Users.Find(userId);
 
-            if (user is null)
-            {
-                return default;
-            }
+        public IEnumerable<ApplicationUser> GetUsers() => _context.Users;
 
-            EntityEntry<ApplicationUser> entity = _context.Entry(user);
-            
-            entity.Collection(u => u.Posts).Load();
-            entity.Collection(u => u.Comments).Load();
-            entity.Collection(u => u.UserTopics).Load();
+        public ApplicationUser GetUserByPostId(string postId) =>
+            _context.Posts
+                .Include(p => p.User)
+                .FirstOrDefault(p => p.Id == postId)?.User;
 
-            return entity.Entity;
-        }
-
-        public IEnumerable<ApplicationUser> GetUsers()
-        {
-           return _context.Users
-                .Include(u => u.Posts)
-                .Include(u => u.Comments)
-                .Include(u => u.UserTopics);
-        }
-
-        public ApplicationUser GetUserByPostId(string postId)
-        {
-            ApplicationUser user = _context.Posts.FirstOrDefault(p => p.Id == postId)?.User;
-
-            if (user is null)
-            {
-                return default;
-            }
-
-            EntityEntry<ApplicationUser> entity = _context.Entry(user);
-
-            entity.Collection(u => u.Posts).Load();
-            entity.Collection(u => u.Comments).Load();
-            entity.Collection(u => u.UserTopics).Load();
-
-            return entity.Entity;
-        }
-
-        public IEnumerable<ApplicationUser> GetUsersByTopicId(string topicId)
-        {
-            return _context.UserTopics
-                .Where(ut => ut.TopicId == topicId)
+        public IEnumerable<ApplicationUser> GetUsersByTopicId(string topicId) =>
+            _context.UserTopics
                 .Include(ut => ut.User)
-                .Select(ut => ut.User)
-                .Include(u => u.Posts)
-                .Include(u => u.Comments)
-                .Include(u => u.UserTopics);
-        }
+                .Where(ut => ut.TopicId == topicId)
+                .Select(ut => ut.User);
 
         public async Task SaveChangesAsync() => await _context.SaveChangesAsync();
 
-        public Comment UpdateComment(Comment comment)
-        {
-            EntityEntry<Comment> entity = _context.Update(comment);
+        public Comment UpdateComment(Comment comment) => _context.Update(comment).Entity;
 
-            entity.Reference(c => c.User).Load();
-            entity.Reference(c => c.Post).Load();
+        public Post UpdatePost(Post post) => _context.Update(post).Entity;
 
-            return entity.Entity;
-        }
+        public Topic UpdateTopic(Topic topic) => _context.Update(topic).Entity;
 
-        public Post UpdatePost(Post post)
-        {
-            EntityEntry<Post> entity = _context.Update(post);
+        public ApplicationUser UpdateUser(ApplicationUser user) => _context.Update(user).Entity;
 
-            entity.Collection(p => p.Comments).Load();
-            entity.Reference(p => p.User).Load();
-            entity.Reference(p => p.Topic).Load();
+        public ApplicationUser GetUserByCommentId(string commentId) =>
+            _context.Comments
+                .Include(c => c.User)
+                .FirstOrDefault(c => c.Id == commentId)?.User;
 
-            return entity.Entity;
-        }
-
-        public Topic UpdateTopic(Topic topic)
-        {
-            EntityEntry<Topic> entity = _context.Update(topic);
-
-            entity.Collection(t => t.Posts).Load();
-            entity.Collection(t => t.UserTopics).Load();
-
-            return entity.Entity;
-        }
-
-        public ApplicationUser UpdateUser(ApplicationUser user)
-        {
-            EntityEntry<ApplicationUser> entity =_context.Update(user);
-
-            entity.Collection(u => u.Posts).Load();
-            entity.Collection(u => u.Comments).Load();
-            entity.Collection(u => u.UserTopics).Load();
-
-            return entity.Entity;
-        }
-
-        public ApplicationUser GetUserByCommentId(string commentId)
-        {
-            ApplicationUser user =_context.Comments.FirstOrDefault(c => c.Id == commentId)?.User;
-
-            if (user is null)
-            {
-                return default;
-            }
-
-            EntityEntry<ApplicationUser> entity = _context.Entry(user);
-
-            entity.Collection(u => u.Posts).Load();
-            entity.Collection(u => u.Comments).Load();
-            entity.Collection(u => u.UserTopics).Load();
-
-            return entity.Entity;
-        }
-
-        public Post GetPostByCommentId(string commentId)
-        {
-            Post post =_context.Comments.FirstOrDefault(c => c.Id == commentId)?.Post;
-
-            if (post is null)
-            {
-                return default;
-            }
-
-            EntityEntry<Post> entity = _context.Entry(post);
-
-            entity.Collection(p => p.Comments).Load();
-            entity.Reference(p => p.User).Load();
-            entity.Reference(p => p.Topic).Load();
-
-            return entity.Entity;
-        }
+        public Post GetPostByCommentId(string commentId) =>
+            _context.Comments
+                .Include(c => c.Post)
+                .FirstOrDefault(c => c.Id == commentId)?.Post;
     }
 }

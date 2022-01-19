@@ -26,6 +26,8 @@ namespace BlooditData.DbContexts
                     @"Server=(localdb)\mssqllocaldb;Database=bloodit;Trusted_connection=True;");
             }
 
+            optionsBuilder.UseLazyLoadingProxies();
+
             base.OnConfiguring(optionsBuilder);
         }
 
