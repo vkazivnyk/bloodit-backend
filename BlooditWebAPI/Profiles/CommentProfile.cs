@@ -18,6 +18,8 @@ namespace BlooditWebAPI.Profiles
                     opt.MapFrom(_ => Guid.NewGuid().ToString()))
                 .ForMember(c => c.Date, opt =>
                     opt.MapFrom(_ => DateTime.Now));
+
+            CreateMap<CommentUpdateInput, Comment>();
         }
     }
 }

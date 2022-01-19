@@ -53,6 +53,24 @@ namespace BlooditWebAPI.GraphQL
             return new PostAddPayload(newPost);
         }
 
+        public async Task<PostUpdatePayload> UpdatePost(
+            PostUpdateInput input,
+            [Service] IAppRepository repository,
+            [Service] IMapper mapper)
+        {
+            if (input is null)
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
+
+            Post post = repository.GetPostById(input.Id);
+            post = mapper.Map(input, post);
+            Post updatedPost = repository.UpdatePost(post);
+            await repository.SaveChangesAsync();
+
+            return new PostUpdatePayload(updatedPost);
+        }
+
         [GraphQLDescription("Represents the mutation for deleting a post.")]
         public async Task<PostDeletePayload> DeletePost(PostDeleteInput input, [Service] IAppRepository repository)
         {
@@ -84,6 +102,25 @@ namespace BlooditWebAPI.GraphQL
             await repository.SaveChangesAsync();
 
             return new CommentAddPayload(addedComment);
+        }
+
+        [GraphQLDescription("Represents the mutation for updating a post comment")]
+        public async Task<CommentUpdatePayload> UpdateComment(
+            CommentUpdateInput input,
+            [Service] IAppRepository repository,
+            [Service] IMapper mapper)
+        {
+            if (input is null)
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
+
+            Comment comment = repository.GetCommentById(input.Id);
+            comment = mapper.Map(input, comment);
+            Comment updatedComment = repository.UpdateComment(comment);
+            await repository.SaveChangesAsync();
+
+            return new CommentUpdatePayload(updatedComment);
         }
 
         [GraphQLDescription("Represents the mutation for deleting a comment.")]
