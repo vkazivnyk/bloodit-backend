@@ -6,7 +6,7 @@ namespace BlooditData.Repositories
 {
     public interface IAppRepository
     {
-        Task SaveChangesAsync();
+        Task<int> SaveChangesAsync();
         ApplicationUser CreateUser(ApplicationUser user);
         Topic CreateTopic(Topic topic);
         Post CreatePost(Post post);
