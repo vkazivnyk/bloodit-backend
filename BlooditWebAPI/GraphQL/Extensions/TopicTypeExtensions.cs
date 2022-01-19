@@ -16,5 +16,10 @@ namespace BlooditWebAPI.GraphQL.Extensions
         {
             return repository.GetUsersByTopicId(topic.Id);
         }
+
+        public int GetSubscriberCount([Parent] Topic topic, [Service] IAppRepository repository)
+        {
+            return repository.GetUsersByTopicId(topic.Id).Count();
+        }
     }
 }

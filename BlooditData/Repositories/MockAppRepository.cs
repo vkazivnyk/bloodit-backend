@@ -266,6 +266,7 @@ namespace BlooditData.Repositories
         public Post GetPostById(string postId) => _posts.Find(p => p.Id == postId);
 
         public IEnumerable<Post> GetPosts() => _posts;
+        public Post GetPostByCommentId(string commentId) => _comments.FirstOrDefault(c => c.Id == commentId)?.Post;
 
         public IEnumerable<Post> GetPostsByTopicId(string topicId) => _posts.Where(p => p.Topic.Id == topicId);
 
@@ -274,6 +275,7 @@ namespace BlooditData.Repositories
         public Topic GetTopicById(string topicId) => _topics.Find(t => t.Id == topicId);
 
         public IEnumerable<Topic> GetTopics() => _topics;
+        public Topic GetTopicByPostId(string postId) => _posts.FirstOrDefault(p => p.Id == postId)?.Topic;
 
         public IEnumerable<Topic> GetTopicsByUserId(string userId) =>
             _userTopics
@@ -284,6 +286,10 @@ namespace BlooditData.Repositories
         public ApplicationUser GetUserById(string userId) => _users.Find(u => u.Id == userId);
 
         public IEnumerable<ApplicationUser> GetUsers() => _users;
+        public ApplicationUser GetUserByPostId(string postId) => _posts.FirstOrDefault(p => p.Id == postId)?.User;
+
+        public ApplicationUser GetUserByCommentId(string commentId) =>
+            _comments.FirstOrDefault(c => c.Id == commentId)?.User;
 
         public IEnumerable<ApplicationUser> GetUsersByTopicId(string topicId) =>
             _userTopics

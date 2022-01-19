@@ -15,7 +15,38 @@ namespace BlooditWebAPI.GraphQL.Posts
         {
             descriptor.Description("Represents the type for a user post.");
 
+            descriptor
+                .Field(p => p.Comments)
+                .Name("comment")
+                .ResolveWith<Resolvers>(r => r.GetComments(default!, default!));
+
+            descriptor
+                .Field(p => p.User)
+                .ResolveWith<Resolvers>(r => r.GetUser(default!, default!));
+
+            descriptor
+                .Field(p => p.Topic)
+                .ResolveWith<Resolvers>(r => r.GetTopic(default!, default!));
+
             base.Configure(descriptor);
+        }
+
+        private class Resolvers
+        {
+            public IEnumerable<Comment> GetComments(Post post, [Service] IAppRepository repository)
+            {
+                return repository.GetCommentsByPostId(post.Id);
+            }
+
+            public ApplicationUser GetUser(Post post, [Service] IAppRepository repository)
+            {
+                return repository.GetUserByPostId(post.Id);
+            }
+
+            public Topic GetTopic(Post post, [Service] IAppRepository repository)
+            {
+                return repository.GetTopicByPostId(post.Id);
+            }
         }
     }
 }

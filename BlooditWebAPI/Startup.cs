@@ -22,16 +22,37 @@ namespace BlooditWebAPI
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
 
         public IConfiguration Configuration { get; }
 
+        public IWebHostEnvironment Environment { get; }
+
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContextPool<AppDbContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("AppDb"));
+            });
+
             services.AddScoped<IAppRepository, MockAppRepository>();
+
+            string corsUrl = Configuration.GetSection("AllowedHosts").Value;
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("Default", builder =>
+                {
+                    builder
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .SetIsOriginAllowed(origin => new Uri(origin).Host == corsUrl);
+                });
+            });
 
             services
                 .AddGraphQLServer()
@@ -51,7 +72,12 @@ namespace BlooditWebAPI
                 .AddType<CommentAddPayloadType>()
                 .AddType<CommentDeleteInputType>()
                 .AddType<CommentDeletePayloadType>()
-                .AddQueryType<Query>();
+                .AddQueryType<Query>()
+                .AddMutationType<Mutation>()
+                .AddFiltering()
+                .AddSorting();
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -68,6 +94,8 @@ namespace BlooditWebAPI
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BlooditWebAPI v1"));
             }
+
+            app.UseCors("Default");
 
             app.UseHttpsRedirection();
 
