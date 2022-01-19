@@ -3,6 +3,7 @@ using BlooditData.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlooditData.Repositories
 {
@@ -37,11 +38,13 @@ namespace BlooditData.Repositories
 
         public IEnumerable<Comment> GetCommentsByPostId(string postId) =>
             _context.Comments
+                .Include(c => c.Post)
                 .Where(c => c.Post.Id == postId)
                 .ToList();
 
         public IEnumerable<Comment> GetCommentsByUserId(string userId) =>
             _context.Comments
+                .Include(c => c.User)
                 .Where(c => c.User.Id == userId)
                 .ToList();
 
@@ -51,11 +54,13 @@ namespace BlooditData.Repositories
 
         public IEnumerable<Post> GetPostsByTopicId(string topicId) =>
             _context.Posts
+                .Include(p => p.Topic)
                 .Where(p => p.Topic.Id == topicId)
                 .ToList();
 
         public IEnumerable<Post> GetPostsByUserId(string userId) =>
             _context.Posts
+                .Include(p => p.User)
                 .Where(p => p.User.Id == userId)
                 .ToList();
 
@@ -65,10 +70,12 @@ namespace BlooditData.Repositories
 
         public Topic GetTopicByPostId(string postId) =>
             _context.Posts
+                .Include(p => p.Topic)
                 .FirstOrDefault(p => p.Id == postId)?.Topic;
 
         public IEnumerable<Topic> GetTopicsByUserId(string userId) =>
             _context.UserTopics
+                .Include(ut => ut.Topic)
                 .Where(ut => ut.UserId == userId)
                 .Select(ut => ut.Topic)
                 .ToList();
@@ -79,10 +86,12 @@ namespace BlooditData.Repositories
 
         public ApplicationUser GetUserByPostId(string postId) =>
             _context.Posts
+                .Include(p => p.User)
                 .FirstOrDefault(p => p.Id == postId)?.User;
 
         public IEnumerable<ApplicationUser> GetUsersByTopicId(string topicId) =>
             _context.UserTopics
+                .Include(ut => ut.User)
                 .Where(ut => ut.TopicId == topicId)
                 .Select(ut => ut.User)
                 .ToList();
@@ -99,10 +108,12 @@ namespace BlooditData.Repositories
 
         public ApplicationUser GetUserByCommentId(string commentId) =>
             _context.Comments
+                .Include(c => c.User)
                 .FirstOrDefault(c => c.Id == commentId)?.User;
 
         public Post GetPostByCommentId(string commentId) =>
             _context.Comments
+                .Include(c => c.Post)
                 .FirstOrDefault(c => c.Id == commentId)?.Post;
     }
 }
