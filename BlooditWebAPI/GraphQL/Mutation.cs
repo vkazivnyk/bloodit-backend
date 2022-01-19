@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using BlooditData.Models;
 using BlooditData.Repositories;
+using BlooditWebAPI.GraphQL.Comments;
 using BlooditWebAPI.GraphQL.Posts;
 using BlooditWebAPI.GraphQL.Topics;
 using HotChocolate;
@@ -64,6 +65,42 @@ namespace BlooditWebAPI.GraphQL
             await repository.SaveChangesAsync();
 
             return new PostDeletePayload(deletedPost);
+        }
+
+        [GraphQLDescription("Represents the mutation for adding a comment.")]
+        public async Task<CommentAddPayload> AddComment(
+            CommentAddInput input,
+            [Service] IAppRepository repository,
+            [Service] IMapper mapper)
+        {
+            if (input is null)
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
+
+            Comment newComment = mapper.Map<Comment>(input);
+
+            repository.CreateComment(newComment);
+            await repository.SaveChangesAsync();
+
+            return new CommentAddPayload(newComment);
+        }
+
+        [GraphQLDescription("Represents the mutation for deleting a comment.")]
+        public async Task<CommentDeletePayload> DeleteComment(
+            CommentDeleteInput input, 
+            [Service] IAppRepository repository, 
+            [Service] IMapper mapper)
+        {
+            if (input is null)
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
+
+            Comment deletedComment = repository.DeleteComment(input.Id);
+            await repository.SaveChangesAsync();
+
+            return new CommentDeletePayload(deletedComment);
         }
     }
 }
