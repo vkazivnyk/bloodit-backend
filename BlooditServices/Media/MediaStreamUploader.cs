@@ -39,6 +39,8 @@ namespace BlooditServices.Media
         {
             string fileExtension = Path.GetExtension(Options.FileName);
 
+            IMediaStream stream = null;
+
             if (_videoExtensions.Contains(fileExtension))
             {
                 VideoStreamOptions options = new(
@@ -48,9 +50,7 @@ namespace BlooditServices.Media
                     10,
                     @"D:\FFmpegLib\bin\ffmpeg");
 
-                VideoStream stream = new(Stream, options);
-
-                return await stream.UploadAsync();
+                stream = new VideoStream(Stream, options);
             }
 
             if (_audioExtensions.Contains(fileExtension))
@@ -60,9 +60,7 @@ namespace BlooditServices.Media
                     Options.OutputFileName,
                     Options.OutputDirectory);
 
-                AudioStream stream = new(Stream, options);
-
-                return await stream.UploadAsync();
+                stream = new AudioStream(Stream, options);
             }
 
             if (_imageExtensions.Contains(fileExtension))
@@ -72,12 +70,15 @@ namespace BlooditServices.Media
                     Options.OutputFileName,
                     Options.OutputDirectory);
 
-                ImageStream stream = new(Stream, options);
-
-                return await stream.UploadAsync();
+                stream = new ImageStream(Stream, options);
             }
 
-            return null;
+            if (stream is null)
+            {
+                return null;
+            }
+
+            return await stream.UploadAsync();
         }
     }
 }
