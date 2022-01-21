@@ -11,7 +11,7 @@ namespace BlooditServices.Media
     public class MediaStreamUploader
     {
         public Stream Stream { get; }
-        
+
         public MediaStreamUploaderOptions Options { get; }
 
         private readonly List<string> _videoExtensions = new()
@@ -24,10 +24,15 @@ namespace BlooditServices.Media
             ".mp3", ".wav"
         };
 
+        private readonly List<string> _imageExtensions = new()
+        {
+            ".png", ".jpg", ".jpeg"
+        };
+
         public MediaStreamUploader(Stream stream, MediaStreamUploaderOptions options)
         {
-            Stream = stream;
-            Options = options;
+            Stream = stream ?? throw new ArgumentNullException(nameof(stream));
+            Options = options ?? throw new ArgumentNullException(nameof(options));
         }
 
         public async Task<string> UploadAsync()
@@ -56,6 +61,18 @@ namespace BlooditServices.Media
                     Options.OutputDirectory);
 
                 AudioStream stream = new(Stream, options);
+
+                return await stream.UploadAsync();
+            }
+
+            if (_imageExtensions.Contains(fileExtension))
+            {
+                ImageStreamOptions options = new(
+                    Options.FileName,
+                    Options.OutputFileName,
+                    Options.OutputDirectory);
+
+                ImageStream stream = new(Stream, options);
 
                 return await stream.UploadAsync();
             }

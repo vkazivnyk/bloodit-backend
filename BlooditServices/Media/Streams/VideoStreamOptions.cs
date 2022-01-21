@@ -7,14 +7,8 @@ using System.Threading.Tasks;
 
 namespace BlooditServices.Media.Streams
 {
-    public class VideoStreamOptions : IMediaStreamOptions
+    public class VideoStreamOptions : MediaStreamOptions
     {
-        public string FileName { get; init; }
-
-        public string OutputFileName { get; init; }
-
-        public string OutputDirectory { get; init; }
-
         public int? ChunkDuration { get; init; }
         
         public string FFmpegPath { get; init; }
@@ -25,20 +19,13 @@ namespace BlooditServices.Media.Streams
             string outputDirectory = null,
             int? chunkDuration = 10,
             string ffMpegPath = @"FFmpegLib\bin\ffmpeg")
+            : base(fileName, outputFileName, outputDirectory)
         {
             if (chunkDuration is <= 0)
             {
                 throw new ArgumentException("The duration of a chunk should be at least 1s.", nameof(chunkDuration));
             }
 
-            string fileExtension = Path.GetExtension(fileName);
-
-            outputFileName ??= Guid.NewGuid() + fileExtension;
-            outputDirectory ??= ".";
-
-            FileName = fileName;
-            OutputFileName = Path.GetFileName(outputFileName);
-            OutputDirectory = outputDirectory;
             ChunkDuration = chunkDuration;
             FFmpegPath = ffMpegPath;
         }
